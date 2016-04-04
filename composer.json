@@ -1,0 +1,7 @@
+{
+    "require-dev": {
+    },
+    "require": {
+        "phpunit/phpunit": "5.0.*"
+    }
+}
