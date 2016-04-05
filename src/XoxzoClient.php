@@ -43,9 +43,23 @@ class XoxzoClient {
   }
 
   public function call_simple_playback($caller, $recipient, $recording_url){
-  }
+    $params = ['form_params' => [
+      'caller' => $caller,
+      'recipient' => $recipient,
+      'recording_url' => $recording_url
+    ]];
+
+    $resp = $this->client->post(
+      $this->xoxzo_api_voice_simple_url,
+      $this->basic_auth_data + $params);
+    return json_decode($resp->getBody());}
 
   public function get_simple_playback_status($callid){
+    $url = $this->xoxzo_api_voice_simple_url . $callid;
+    $resp = $this->client->get(
+      $url,
+      $this->basic_auth_data);
+    return json_decode($resp->getBody());
   }
 }
 ?>

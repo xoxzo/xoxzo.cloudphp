@@ -1,4 +1,4 @@
 all: test
 
 test:
-	phpunit tests/XoxzoClientTest.php
+	phpunit --verbose tests/XoxzoClientTest.php
