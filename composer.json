@@ -1,8 +1,18 @@
 {
+  "name": "xoxzo/cloudphp",
+  "description": "Xoxo telephony libirary",
+  "authors": [
+      {
+          "name": "Akira Nonaka",
+          "email": "nonaka@mac.com"
+      }
+  ],
+  "minimum-stability": "dev",
+
     "require-dev": {
+      "phpunit/phpunit": "5.0.*"
     },
     "require": {
-        "phpunit/phpunit": "5.0.*",
         "guzzlehttp/guzzle": "^6.2"
     }
 }
