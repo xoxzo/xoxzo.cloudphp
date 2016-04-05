@@ -31,7 +31,7 @@ class XoxzoClient {
     $resp = $this->client->post(
       $this->xoxzo_api_sms_url,
       $this->basic_auth_data + $params);
-    echo $resp;
+    return json_decode($resp->getBody());
   }
 
   public function get_sms_delivery_status($msgid){
@@ -48,5 +48,4 @@ class XoxzoClient {
   public function get_simple_playback_status($callid){
   }
 }
-
 ?>
