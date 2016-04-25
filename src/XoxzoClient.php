@@ -75,8 +75,12 @@ class XoxzoClient {
     } catch (TransferException $e) {
       return $this->handleException($e);
     }
+    $stat = $resp->getStatusCode();
+    if ($stat == 200) {
+      $stat = null;
+    }
     $msgs = json_decode($resp->getBody());
-    return (new XoxzoResponse(null, $msgs));
+    return (new XoxzoResponse($stat, $msgs));
   }
 
   public function get_sent_sms_list($sent_date)
@@ -89,8 +93,12 @@ class XoxzoClient {
     } catch (TransferException $e) {
       return $this->handleException($e);
     }
+    $stat = $resp->getStatusCode();
+    if ($stat == 200) {
+      $stat = null;
+    }
     $msgs = json_decode($resp->getBody());
-    return (new XoxzoResponse(null, $msgs));
+    return (new XoxzoResponse($stat, $msgs));
   }
 
   public function call_simple_playback($caller, $recipient, $recording_url){
@@ -107,6 +115,10 @@ class XoxzoClient {
     } catch (TransferException $e) {
         return $this->handleException($e);
     }
+    $stat = $resp->getStatusCode();
+    if ($stat == 201) {
+      $stat = null;
+    }
     $msgs = json_decode($resp->getBody());
     return (new XoxzoResponse(null, $msgs));
   }
@@ -120,8 +132,12 @@ class XoxzoClient {
     } catch (TransferException $e) {
         return $this->handleException($e);
     }
+    $stat = $resp->getStatusCode();
+    if ($stat == 200) {
+      $stat = null;
+    }
     $msgs = json_decode($resp->getBody());
-    return (new XoxzoResponse(null, $msgs));
+    return (new XoxzoResponse($stat, $msgs));
   }
 }
 ?>
