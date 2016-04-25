@@ -13,38 +13,37 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $this->xc = new XoxzoClient($sid,$auth_token);
   }
 
-  public function test_send_sms_01() {
+  public function test_send_sms_success01() {
     $this->markTestIncomplete('Skip this test for now.');
     $recipient = getenv('XOXZO_API_TEST_RECIPIENT');
     $resp = $this->xc->send_sms("Hello form Xoxzo PHP lib",$recipient,"814512345678");
-    $msgid = $resp[0]->msgid;
+    $this->assertEquals($resp->errors,null);
+    $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
+
+    $msgid = $resp->messages[0]->msgid;
     $resp = $this->xc->get_sms_delivery_status($msgid);
-    $this->assertObjectHasAttribute('msgid', $resp);
+    $this->assertEquals($resp->errors, null);
+    $this->assertObjectHasAttribute('msgid', $resp->messages);
   }
 
-  /**
-   * @expectedException     GuzzleHttp\Exception\ClientException
-   * @expectedExceptionCode 400
-  */
-  public function test_send_sms_02() {
+  public function test_send_sms_fail01() {
     # bad recepient
     $resp = $this->xc->send_sms("Hello form Xoxzo PHP lib","+8108012345678","814512345678");
-  }
-
-  /**
-   * @expectedException     GuzzleHttp\Exception\ClientException
-   * @expectedExceptionCode 404
-  */
+    $this->assertEquals($resp->errors, 400);
+    var_dump($resp->messages);
+    $this->assertObjectHasAttribute('detail', $resp->messages);
+    }
 
   public function test_get_sms_delivery_status_01() {
     # bad msgid
     $resp =  $this->xc->get_sms_delivery_status("W0kYZfyBeTpqcPv2AnKolSjOwDr3d87i");
+    $this->assertEquals($resp->errors, 404);
   }
 
   public function test_get_sms_delivery_status_02() {
     # retreave all msgids
     $resp =  $this->xc->get_sms_delivery_status("");
-    $this->assertTrue(is_array($resp));
+    $this->assertEquals($resp->errors, 200);
   }
 
   public function test_call_simple_playback_01() {
@@ -58,22 +57,16 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $this->assertObjectHasAttribute('callid', $resp);
   }
 
-  /**
-   * @expectedException     GuzzleHttp\Exception\ClientException
-   * @expectedExceptionCode 404
-  */
-
   public function test_get_simple_playback_status_01() {
     # bad call id
     $resp =  $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca483");
+    $this->assertEquals($resp->errors, 404);
   }
 
   public function test_get_simple_playback_status_02() {
     # retreave all msgids
-    $resp =  $this->xc->get_simple_playback_status("");
-    var_dump($resp);
-    $this->assertTrue(is_array($resp));
+    $resp =  $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca484");
+    $this->assertEquals($resp->errors, 200);
   }
-
 }
 ?>
