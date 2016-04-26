@@ -85,7 +85,11 @@ class XoxzoClient {
 
   public function get_sent_sms_list($sent_date)
   {
-    $url = $this->xoxzo_api_sms_url . '?sent_date' . $sent_date;
+    if ($sent_date != "") {
+      $url = $this->xoxzo_api_sms_url . '?sent_date' . $sent_date;
+    } else {
+      $url = $this->xoxzo_api_sms_url;
+    }
     try {
       $resp = $this->client->get(
         $url,

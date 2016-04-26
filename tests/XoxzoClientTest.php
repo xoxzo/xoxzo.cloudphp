@@ -50,6 +50,24 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
   }
 
+  public function test_get_sent_sms_list_01(){
+    $resp =  $this->xc->get_sent_sms_list("");
+    $this->assertEquals($resp->errors, null);
+    $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
+  }
+
+  public function test_get_sent_sms_list_02(){
+    $resp =  $this->xc->get_sent_sms_list('>=2016-04-01');
+    $this->assertEquals($resp->errors, null);
+    $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
+  }
+
+  public function test_get_sent_sms_list_03(){
+    $resp =  $this->xc->get_sent_sms_list('>=2016-13-01');
+    $this->assertEquals($resp->errors, 400);
+    $this->assertObjectHasAttribute('sent_date', $resp->messages);
+  }
+
   public function test_call_simple_playback_01() {
     $this->markTestIncomplete('Skip this test for now.');
     $recipient = getenv('XOXZO_API_TEST_RECIPIENT');
