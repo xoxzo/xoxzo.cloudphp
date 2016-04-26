@@ -39,7 +39,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($resp->errors, 404);
     # this test currently fails due to bug
     #$this->assertEquals($resp->messages, null);
-    # todo: fix this test when tbe bug is fixed
+    # todo: fix this test when the bug is fixed
     $this->assertEquals($resp->messages, []);
   }
 
@@ -56,15 +56,23 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $recording_url = getenv('XOXZO_API_TEST_MP3');
     $caller = '814512345678';
     $resp = $this->xc->call_simple_playback($caller, $recipient, $recording_url);
-    $callid = $resp[0]->callid;
+    $this->assertEquals($resp->errors, null);
+    $this->assertObjectHasAttribute('callid', $resp->messages[0]);
+
+    $callid = $resp->messages[0]->callid;
     $resp = $this->xc->get_simple_playback_status($callid);
-    $this->assertObjectHasAttribute('callid', $resp);
+    $this->assertEquals($resp->errors, null);
+    $this->assertObjectHasAttribute('callid', $resp->messages);
   }
 
   public function test_get_simple_playback_status_01() {
     # bad call id
     $resp =  $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca483");
     $this->assertEquals($resp->errors, 404);
+    # this test currently fails due to bug
+    #$this->assertEquals($resp->messages, null);
+    # todo: fix this test when the bug is fixed
+    $this->assertEquals($resp->messages, "");
   }
 }
 ?>
