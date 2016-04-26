@@ -124,7 +124,7 @@ class XoxzoClient {
       $stat = null;
     }
     $msgs = json_decode($resp->getBody());
-    return (new XoxzoResponse(null, $msgs));
+    return (new XoxzoResponse($stat, $msgs));
   }
 
   public function get_simple_playback_status($callid){

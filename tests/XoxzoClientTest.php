@@ -68,7 +68,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $this->assertObjectHasAttribute('sent_date', $resp->messages);
   }
 
-  public function test_call_simple_playback_01() {
+  public function test_call_simple_playback_success01() {
     $this->markTestIncomplete('Skip this test for now.');
     $recipient = getenv('XOXZO_API_TEST_RECIPIENT');
     $recording_url = getenv('XOXZO_API_TEST_MP3');
@@ -81,6 +81,15 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase {
     $resp = $this->xc->get_simple_playback_status($callid);
     $this->assertEquals($resp->errors, null);
     $this->assertObjectHasAttribute('callid', $resp->messages);
+  }
+
+  public function test_call_simple_playback_fail01() {
+    $recipient = '+8108012345678';
+    $recording_url = getenv('XOXZO_API_TEST_MP3');
+    $caller = '814512345678';
+    $resp = $this->xc->call_simple_playback($caller, $recipient, $recording_url);
+    $this->assertEquals($resp->errors, 400);
+    $this->assertObjectHasAttribute('recipient', $resp->messages);
   }
 
   public function test_get_simple_playback_status_01() {
