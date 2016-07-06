@@ -184,14 +184,65 @@ class XoxzoClient
 
     public function subscribe_din($din_uid)
     {
+        $url = $this->xoxzo_api_dins_url . "subscriptions/";
+        $params = ['form_params' => ['din_uid' => $din_uid]];
+        try {
+            $resp = $this->client->post($url, $this->guzzle_options + $params);
+        }
+
+        catch(TransferException $e) {
+            return $this->handleException($e);
+        }
+
+        $stat = $resp->getStatusCode();
+        if ($stat == 201) {
+            $stat = null;
+        }
+
+        $msgs = json_decode($resp->getBody());
+        return (new XoxzoResponse($stat, $msgs));
     }
 
     public function unsubscribe_din($din_uid)
     {
+        $url = $this->xoxzo_api_dins_url . "subscriptions/" . $din_uid . "/";
+
+        try {
+            $resp = $this->client->delete($url, $this->guzzle_options);
+        }
+
+        catch(TransferException $e) {
+            return $this->handleException($e);
+        }
+
+        $stat = $resp->getStatusCode();
+        if ($stat == 200) {
+            $stat = null;
+        }
+
+        $msgs = json_decode($resp->getBody());
+        return (new XoxzoResponse($stat, $msgs));
     }
 
     public function get_subscription_list()
     {
+        $url = $this->xoxzo_api_dins_url . "subscriptions/";
+
+        try {
+            $resp = $this->client->get($url, $this->guzzle_options);
+        }
+
+        catch(TransferException $e) {
+            return $this->handleException($e);
+        }
+
+        $stat = $resp->getStatusCode();
+        if ($stat == 200) {
+            $stat = null;
+        }
+
+        $msgs = json_decode($resp->getBody());
+        return (new XoxzoResponse($stat, $msgs));
     }
 
     public function set_action_url($din_uid, $action_url)

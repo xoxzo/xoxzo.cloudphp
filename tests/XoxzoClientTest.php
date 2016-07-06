@@ -148,5 +148,23 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $resp = $this->xc->get_din_list("foo=813");
         $this->assertEquals($resp->errors, 400);
     }
+
+    public function test_din(){
+        $resp = $this->xc->get_din_list();
+        $this->assertEquals($resp->errors, null);
+        #print_r($resp->messages);
+        $a_din_uid = $resp->messages[1]->din_uid;
+
+        $resp = $this->xc->subscribe_din($a_din_uid);
+        #print_r($resp->messages);
+        $this->assertEquals($resp->errors, null);
+
+        $resp = $this->xc->unsubscribe_din($a_din_uid);
+        $this->assertEquals($resp->errors, null);
+
+        $resp = $this->xc->get_subscription_list();
+        $this->assertEquals($resp->errors, null);
+        print_r($resp->messages);
+    }
 }
 ?>
