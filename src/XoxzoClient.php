@@ -155,6 +155,26 @@ class XoxzoClient
         $msgs = json_decode($resp->getBody());
         return (new XoxzoResponse($stat, $msgs));
     }
+
+    public function get_din_list($search_string)
+    {
+    }
+
+    public function subscribe_din($din_uid)
+    {
+    }
+
+    public function unsubscribe_din($din_uid)
+    {
+    }
+
+    public function get_subscription_list()
+    {
+    }
+
+    public function set_action_url($din_uid, $action_url)
+    {
+    }
 }
 
 ?>
