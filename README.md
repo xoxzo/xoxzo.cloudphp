@@ -77,3 +77,34 @@ var_dump($resp);
 + This method will return `XoxzoResponse` object. If `XoxzoResponse.errors == null`, `XoxzoResponse->messages[0]->callid` is the call id that you can pass to the `get_simple_playback_status() call.
 
 + You can check the call status by `get_simple_playback_status()` method. You will provide call-id of the phone call you want to check.
+
+
+-----
+
+### DIN (Dial in numbers)
+
+### Subscribe DIN
+
+```
+$resp = $this->xc->get_din_list();
+$a_din_uid = $resp->messages[0]->din_uid;
+$resp = $this->xc->subscribe_din($a_din_uid);
+```
+
+#### Explanation
+
+1. In order to subscribe DIN, you must find available unsubscribed DINs using get_din_list() method.
+
+2. The you subscribe a DIN via subscribe_din() method specifying din uniq id.
+
+### Set action URL
+
+```
+$sample_acrion_url = "http://example.com/dummy_url";
+$resp = $this->xc->set_action_url($a_din_uid, $sample_acrion_url);
+```
+
+#### Explanation
+
+1. Once you subscribed the DIN, you can set action url to the DIN. This URL will be called in the event of the DIN gets called.
+The URL will called by http GET method with the parameters, caller and recipient.
