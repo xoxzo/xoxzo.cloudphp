@@ -247,6 +247,23 @@ class XoxzoClient
 
     public function set_action_url($din_uid, $action_url)
     {
+        $url = $this->xoxzo_api_dins_url . "subscriptions/" . $din_uid . "/";
+        $params = ['form_params' => ['action_url' => $action_url]];
+        try {
+            $resp = $this->client->post($url, $this->guzzle_options + $params);
+        }
+
+        catch(TransferException $e) {
+            return $this->handleException($e);
+        }
+
+        $stat = $resp->getStatusCode();
+        if ($stat == 200) {
+            $stat = null;
+        }
+
+        $msgs = json_decode($resp->getBody());
+        return (new XoxzoResponse($stat, $msgs));
     }
 }
 

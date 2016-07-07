@@ -121,12 +121,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         // bad call id
         $resp = $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca483");
         $this->assertEquals($resp->errors, 404);
-
-        // this test currently fails due to bug
-        // $this->assertEquals($resp->messages, null);
-        // todo: fix this test when the bug is fixed
-
-        $this->assertEquals($resp->messages, "");
+        $this->assertEquals($resp->messages, null);
     }
 
     public function test_get_din_list_success_01(){
@@ -153,18 +148,38 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $resp = $this->xc->get_din_list();
         $this->assertEquals($resp->errors, null);
         #print_r($resp->messages);
+        # use index 1 to work around the bug
         $a_din_uid = $resp->messages[1]->din_uid;
-
         $resp = $this->xc->subscribe_din($a_din_uid);
-        #print_r($resp->messages);
         $this->assertEquals($resp->errors, null);
+
+        $sample_acrion_url = "http://example.com/dummy_url";
+        $resp = $this->xc->set_action_url($a_din_uid, $sample_acrion_url);
+        $this->assertEquals($resp->errors, null);
+
+        $resp = $this->xc->get_subscription_list();
+        $this->assertEquals($resp->errors, null);
+
+        # check if action url properly set
+        foreach ($resp->messages as $value){
+            if ($value->din_uid == $a_din_uid) {
+                $this->assertEquals($value->action->url, $sample_acrion_url);
+            }
+        }
 
         $resp = $this->xc->unsubscribe_din($a_din_uid);
         $this->assertEquals($resp->errors, null);
 
         $resp = $this->xc->get_subscription_list();
         $this->assertEquals($resp->errors, null);
-        print_r($resp->messages);
+
+        # check if subscription is deleted
+        foreach ($resp->messages as $value){
+            # $a_din_uid = "JPdNoawYOC5XMnDy"; test if this test is really wroking
+            if ($value->din_uid == $a_din_uid) {
+                $this->fail('Unsubscribe DIN failed for ' . $a_din_uid);;
+            }
+        }
     }
 }
 ?>
