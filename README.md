@@ -95,7 +95,7 @@ $resp = $this->xc->subscribe_din($a_din_uid);
 
 1. In order to subscribe DIN, you must find available unsubscribed DINs using get_din_list() method.
 
-2. The you subscribe a DIN via subscribe_din() method specifying din uniq id.
+2. Then you subscribe a DIN via subscribe_din() method specifying din unique id.
 
 ### Set action URL
 
