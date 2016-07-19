@@ -8,6 +8,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        date_default_timezone_set('UTC');
         $sid = getenv('XOXZO_API_SID');
         $auth_token = getenv('XOXZO_API_AUTH_TOKEN');
         $this->xc = new XoxzoClient($sid, $auth_token);
@@ -39,12 +40,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         // bad msgid
         $resp = $this->xc->get_sms_delivery_status("W0kYZfyBeTpqcPv2AnKolSjOwDr3d87i-xxx");
         $this->assertEquals($resp->errors, 404);
-
-        // this test currently fails due to bug
-        // $this->assertEquals($resp->messages, null);
-        // todo: fix this test when the bug is fixed
-
-        $this->assertEquals($resp->messages, []);
+        $this->assertEquals($resp->messages, null);
     }
 
     public function test_get_sms_delivery_status_02()
@@ -64,18 +60,37 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_sent_sms_list_02()
     {
-        $resp = $this->xc->get_sent_sms_list('>=2016-04-01');
+        # test 89 days ago, shoud success
+        $sixty_days_ago = date('Y-m-d', strtotime("-89 day"));
+        $resp = $this->xc->get_sent_sms_list('>=' . $sixty_days_ago);
         $this->assertEquals($resp->errors, null);
         $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
     }
-
     public function test_get_sent_sms_list_03()
     {
+        # test 91 days ago, should fail
+        $sixty_days_ago = date('Y-m-d', strtotime("-91 day"));
+        $resp = $this->xc->get_sent_sms_list('>=' . $sixty_days_ago);
+        $this->assertEquals($resp->errors, 400);
+    }
+
+
+    public function test_get_sent_sms_list_04()
+    {
+        # bad date test
+
         $resp = $this->xc->get_sent_sms_list('>=2016-13-01');
         $this->assertEquals($resp->errors, 400);
         $this->assertObjectHasAttribute('sent_date', $resp->messages);
     }
 
+    public function test_get_sent_sms_list_05()
+    {
+        # use defalut parameter
+        $resp = $this->xc->get_sent_sms_list();
+        $this->assertEquals($resp->errors, null);
+        $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
+    }
     public function test_call_simple_playback_success01()
     {
         $this->markTestIncomplete('Skip this test for now.');
@@ -106,12 +121,65 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         // bad call id
         $resp = $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca483");
         $this->assertEquals($resp->errors, 404);
+        $this->assertEquals($resp->messages, null);
+    }
 
-        // this test currently fails due to bug
-        // $this->assertEquals($resp->messages, null);
-        // todo: fix this test when the bug is fixed
+    public function test_get_din_list_success_01(){
+        $resp = $this->xc->get_din_list();
+        $this->assertEquals($resp->errors, null);
+    }
+    public function test_get_din_list_success_02(){
+        $resp = $this->xc->get_din_list("country=JP");
+        $this->assertEquals($resp->errors, null);
+    }
 
-        $this->assertEquals($resp->messages, "");
+    public function test_get_din_list_success_03(){
+        $resp = $this->xc->get_din_list("prefix=813");
+        $this->assertEquals($resp->errors, null);
+    }
+
+    public function test_get_din_list_fail_01(){
+        # bad query string
+        $resp = $this->xc->get_din_list("foo=813");
+        $this->assertEquals($resp->errors, 400);
+    }
+
+    public function test_din(){
+        $resp = $this->xc->get_din_list();
+        $this->assertEquals($resp->errors, null);
+        #print_r($resp->messages);
+        # use index 1 to work around the bug
+        $a_din_uid = $resp->messages[1]->din_uid;
+        $resp = $this->xc->subscribe_din($a_din_uid);
+        $this->assertEquals($resp->errors, null);
+
+        $sample_acrion_url = "http://example.com/dummy_url";
+        $resp = $this->xc->set_action_url($a_din_uid, $sample_acrion_url);
+        $this->assertEquals($resp->errors, null);
+
+        $resp = $this->xc->get_subscription_list();
+        $this->assertEquals($resp->errors, null);
+
+        # check if action url properly set
+        foreach ($resp->messages as $value){
+            if ($value->din_uid == $a_din_uid) {
+                $this->assertEquals($value->action->url, $sample_acrion_url);
+            }
+        }
+
+        $resp = $this->xc->unsubscribe_din($a_din_uid);
+        $this->assertEquals($resp->errors, null);
+
+        $resp = $this->xc->get_subscription_list();
+        $this->assertEquals($resp->errors, null);
+
+        # check if subscription is deleted
+        foreach ($resp->messages as $value){
+            # $a_din_uid = "JPdNoawYOC5XMnDy"; test if this test is really wroking
+            if ($value->din_uid == $a_din_uid) {
+                $this->fail('Unsubscribe DIN failed for ' . $a_din_uid);;
+            }
+        }
     }
 }
 ?>
