@@ -32,7 +32,10 @@ class XoxzoClient
         $api_host = "https://api.xoxzo.com";
         $this->xoxzo_api_sms_url = $api_host . "/sms/messages/";
         $this->xoxzo_api_voice_simple_url = $api_host . "/voice/simple/playback/";
+<<<<<<< HEAD
         $this->xoxzo_api_dins_url = $api_host . "/voice/dins/";
+=======
+>>>>>>> master
         $this->guzzle_options = ['http_errors' => false] + $basic_auth_data;
     }
 
@@ -91,7 +94,11 @@ class XoxzoClient
         return (new XoxzoResponse($stat, $msgs));
     }
 
+<<<<<<< HEAD
     public function get_sent_sms_list($sent_date="")
+=======
+    public function get_sent_sms_list($sent_date)
+>>>>>>> master
     {
         if ($sent_date != "") {
             $url = $this->xoxzo_api_sms_url . '?sent_date' . $sent_date;
@@ -156,6 +163,7 @@ class XoxzoClient
         $msgs = json_decode($resp->getBody());
         return (new XoxzoResponse($stat, $msgs));
     }
+<<<<<<< HEAD
 
     public function get_din_list($search_string="")
     {
@@ -265,6 +273,8 @@ class XoxzoClient
         $msgs = json_decode($resp->getBody());
         return (new XoxzoResponse($stat, $msgs));
     }
+=======
+>>>>>>> master
 }
 
 ?>

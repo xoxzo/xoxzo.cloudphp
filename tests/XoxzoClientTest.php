@@ -8,7 +8,10 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+<<<<<<< HEAD
         date_default_timezone_set('UTC');
+=======
+>>>>>>> master
         $sid = getenv('XOXZO_API_SID');
         $auth_token = getenv('XOXZO_API_AUTH_TOKEN');
         $this->xc = new XoxzoClient($sid, $auth_token);
@@ -40,7 +43,16 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         // bad msgid
         $resp = $this->xc->get_sms_delivery_status("W0kYZfyBeTpqcPv2AnKolSjOwDr3d87i-xxx");
         $this->assertEquals($resp->errors, 404);
+<<<<<<< HEAD
         $this->assertEquals($resp->messages, null);
+=======
+
+        // this test currently fails due to bug
+        // $this->assertEquals($resp->messages, null);
+        // todo: fix this test when the bug is fixed
+
+        $this->assertEquals($resp->messages, []);
+>>>>>>> master
     }
 
     public function test_get_sms_delivery_status_02()
@@ -60,6 +72,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_sent_sms_list_02()
     {
+<<<<<<< HEAD
         # test 89 days ago, shoud success
         $sixty_days_ago = date('Y-m-d', strtotime("-89 day"));
         $resp = $this->xc->get_sent_sms_list('>=' . $sixty_days_ago);
@@ -78,11 +91,21 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
     public function test_get_sent_sms_list_04()
     {
         # bad date test
+=======
+        $resp = $this->xc->get_sent_sms_list('>=2016-04-01');
+        $this->assertEquals($resp->errors, null);
+        $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
+    }
+
+    public function test_get_sent_sms_list_03()
+    {
+>>>>>>> master
         $resp = $this->xc->get_sent_sms_list('>=2016-13-01');
         $this->assertEquals($resp->errors, 400);
         $this->assertObjectHasAttribute('sent_date', $resp->messages);
     }
 
+<<<<<<< HEAD
     public function test_get_sent_sms_list_05()
     {
         # use defalut parameter
@@ -91,6 +114,8 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
     }
 
+=======
+>>>>>>> master
     public function test_call_simple_playback_success01()
     {
         $this->markTestIncomplete('Skip this test for now.');
@@ -121,6 +146,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         // bad call id
         $resp = $this->xc->get_simple_playback_status("b160f404-f1b8-4576-b56a-f557c3fca483");
         $this->assertEquals($resp->errors, 404);
+<<<<<<< HEAD
         $this->assertEquals($resp->messages, null);
     }
 
@@ -180,6 +206,14 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Unsubscribe DIN failed for ' . $a_din_uid);;
             }
         }
+=======
+
+        // this test currently fails due to bug
+        // $this->assertEquals($resp->messages, null);
+        // todo: fix this test when the bug is fixed
+
+        $this->assertEquals($resp->messages, "");
+>>>>>>> master
     }
 }
 ?>
