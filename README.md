@@ -86,9 +86,9 @@ var_dump($resp);
 ### Subscribe DIN
 
 ```
-$resp = $this->xc->get_din_list();
+$resp = $xc->get_din_list();
 $a_din_uid = $resp->messages[0]->din_uid;
-$resp = $this->xc->subscribe_din($a_din_uid);
+$resp = $xc->subscribe_din($a_din_uid);
 ```
 
 #### Explanation
@@ -101,7 +101,7 @@ $resp = $this->xc->subscribe_din($a_din_uid);
 
 ```
 $sample_acrion_url = "http://example.com/dummy_url";
-$resp = $this->xc->set_action_url($a_din_uid, $sample_acrion_url);
+$resp = $xc->set_action_url($a_din_uid, $sample_acrion_url);
 ```
 
 #### Explanation
