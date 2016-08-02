@@ -61,16 +61,16 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
     public function test_get_sent_sms_list_02()
     {
         # test 89 days ago, shoud success
-        $sixty_days_ago = date('Y-m-d', strtotime("-89 day"));
-        $resp = $this->xc->get_sent_sms_list('>=' . $sixty_days_ago);
+        $days_ago = date('Y-m-d', strtotime("-89 day"));
+        $resp = $this->xc->get_sent_sms_list('>=' . $days_ago);
         $this->assertEquals($resp->errors, null);
         $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
     }
     public function test_get_sent_sms_list_03()
     {
         # test 91 days ago, should fail
-        $sixty_days_ago = date('Y-m-d', strtotime("-91 day"));
-        $resp = $this->xc->get_sent_sms_list('>=' . $sixty_days_ago);
+        $days_ago = date('Y-m-d', strtotime("-91 day"));
+        $resp = $this->xc->get_sent_sms_list('>=' . $days_ago);
         $this->assertEquals($resp->errors, 400);
     }
 
@@ -147,9 +147,8 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
     public function test_din(){
         $resp = $this->xc->get_din_list();
         $this->assertEquals($resp->errors, null);
-        #print_r($resp->messages);
-        # use index 1 to work around the bug
-        $a_din_uid = $resp->messages[1]->din_uid;
+        # print_r($resp->messages);
+        $a_din_uid = $resp->messages[0]->din_uid;
         $resp = $this->xc->subscribe_din($a_din_uid);
         $this->assertEquals($resp->errors, null);
 
