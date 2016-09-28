@@ -117,7 +117,7 @@ $resp = $this->xc->get_subscription_list();
 ```
 ### Explanation
 
-In order to get the list of current subscription, you can call the method above.
+In order to get the list of current subscriptions, you can call the method above.
 
 ### Unsubscribe DIN:
 
