@@ -109,3 +109,22 @@ $resp = $xc->set_action_url($a_din_uid, $sample_acrion_url);
 
 1. Once you subscribed the DIN, you can set action url to the DIN. This URL will be called in the event of the DIN gets called.
 The URL will called by http GET method with the parameters, caller and recipient.
+
+### Get the list of subscription:
+
+```
+$resp = $this->xc->get_subscription_list();
+```
+### Explanation
+
+In order to get the list of current subscriptions, you can call the method above.
+
+### Unsubscribe DIN:
+
+```
+$resp = $this->xc->unsubscribe_din($a_din_uid);
+```
+
+### Explanation
+
+When you no longer use DIN, you can unsubscribe the DIN by specifying the din unique id.
