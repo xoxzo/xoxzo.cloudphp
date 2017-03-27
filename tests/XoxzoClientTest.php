@@ -66,6 +66,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resp->errors, null);
         $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
     }
+
     public function test_get_sent_sms_list_03()
     {
         # test 91 days ago, should fail
@@ -74,11 +75,9 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resp->errors, 400);
     }
 
-
     public function test_get_sent_sms_list_04()
     {
         # bad date test
-
         $resp = $this->xc->get_sent_sms_list('>=2016-13-01');
         $this->assertEquals($resp->errors, 400);
         $this->assertObjectHasAttribute('sent_date', $resp->messages);
@@ -91,6 +90,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resp->errors, null);
         $this->assertObjectHasAttribute('msgid', $resp->messages[0]);
     }
+
     public function test_call_simple_playback_success01()
     {
         $this->markTestIncomplete('Skip this test for now.');
@@ -116,6 +116,33 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('recipient', $resp->messages);
     }
 
+    public function test_call_tts_playback_success01()
+    {
+        $this->markTestIncomplete('Skip this test for now.');
+        $recipient = getenv('XOXZO_API_TEST_RECIPIENT');
+        $tts_message = getenv('XOXZO_API_TEST_TTS_MESSAGE');
+        $tts_lang = getenv('XOXZO_API_TEST_TTS_LANG');
+        $caller = '814512345678';
+        $resp = $this->xc->call_tts_playback($caller, $recipient, $tts_message, $tts_lang);
+        $this->assertEquals($resp->errors, null);
+        $this->assertObjectHasAttribute('callid', $resp->messages[0]);
+        $callid = $resp->messages[0]->callid;
+        $resp = $this->xc->get_simple_playback_status($callid);
+        $this->assertEquals($resp->errors, null);
+        $this->assertObjectHasAttribute('callid', $resp->messages);
+    }
+
+    public function test_call_tts_playback_fail01()
+    {
+        $recipient = '+8108012345678';
+        $tts_message = getenv('XOXZO_API_TEST_TTS_MESSAGE');
+        $tts_lang = getenv('XOXZO_API_TEST_TTS_LANG');
+        $caller = '814512345678';
+        $resp = $this->xc->call_tts_playback($caller, $recipient, $tts_message, $tts_lang);
+        $this->assertEquals($resp->errors, 400);
+        $this->assertObjectHasAttribute('recipient', $resp->messages);
+    }
+
     public function test_get_simple_playback_status_01()
     {
         // bad call id
@@ -128,6 +155,7 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
         $resp = $this->xc->get_din_list();
         $this->assertEquals($resp->errors, null);
     }
+
     public function test_get_din_list_success_02(){
         $resp = $this->xc->get_din_list("country=JP");
         $this->assertEquals($resp->errors, null);
