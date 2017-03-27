@@ -116,6 +116,18 @@ class XoxzoClient
         }
     }
 
+    public function call_tts_playback($caller, $recipient, $tts_message, $tts_lang)
+    {
+        $params = ['form_params' => ['caller' => $caller, 'recipient' => $recipient, 'tts_message' => $tts_message, 'tts_lang' => $tts_lang]];
+        try {
+            $resp = $this->client->post($this->xoxzo_api_voice_simple_url, $this->guzzle_options + $params);
+            return $this->parse($resp);
+        }
+        catch(TransferException $e) {
+            return $this->handleException($e);
+        }
+    }
+
     public function get_simple_playback_status($callid)
     {
         $url = $this->xoxzo_api_voice_simple_url . $callid;
