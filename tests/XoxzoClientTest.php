@@ -120,8 +120,8 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('Skip this test for now.');
         $recipient = getenv('XOXZO_API_TEST_RECIPIENT');
-        $tts_message = getenv('XOXZO_API_TEST_TTS_MESSAGE');
-        $tts_lang = getenv('XOXZO_API_TEST_TTS_LANG');
+        $tts_message = 'Hello';
+        $tts_lang = 'en';
         $caller = '814512345678';
         $resp = $this->xc->call_tts_playback($caller, $recipient, $tts_message, $tts_lang);
         $this->assertEquals($resp->errors, null);
@@ -135,8 +135,8 @@ class XoxzoClientTest extends \PHPUnit_Framework_TestCase
     public function test_call_tts_playback_fail01()
     {
         $recipient = '+8108012345678';
-        $tts_message = getenv('XOXZO_API_TEST_TTS_MESSAGE');
-        $tts_lang = getenv('XOXZO_API_TEST_TTS_LANG');
+        $tts_message = 'Hello';
+        $tts_lang = 'en';
         $caller = '814512345678';
         $resp = $this->xc->call_tts_playback($caller, $recipient, $tts_message, $tts_lang);
         $this->assertEquals($resp->errors, 400);
