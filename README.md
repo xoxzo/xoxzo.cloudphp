@@ -1,6 +1,6 @@
 # xoxzo.cloudphp
 
-This is the PHP client library for Xoxzo Cloud API. You can send sms or make a phone call and payback mp3 files.
+This is the PHP client library for Xoxzo Cloud API. You can send sms or make a phone call and playback mp3 files.
 
 ## Sample Code
 
@@ -46,13 +46,13 @@ var_dump($resp);
 ```
 use xoxzo\cloudphp\XoxzoClient;
 
-$$sid = <Your Xoxzo SID>;
-$auth_token = <Your Xoxzo AUTH TOKEN>
+$sid = <Your Xoxzo SID>;
+$auth_token = <Your Xoxzo AUTH TOKEN>;
 $recipient = '+818012345678';
 $recording_url = 'http://exmaple.com/exmaple.mp3';
 $caller = '8108012345678';
 
-$xc = new XoxzoClient($sid,$auth_token);
+$xc = new XoxzoClient($sid, $auth_token);
 
 $resp = $xc->call_simple_playback($caller, $recipient, $recording_url);
 
@@ -78,10 +78,46 @@ var_dump($resp);
 
 + You can check the call status by `get_simple_playback_status()` method. You will provide call-id of the phone call you want to check.
 
+-----
+### Playback TTS
+```
+use xoxzo\cloudphp\XoxzoClient;
 
+$sid = <Your Xoxzo SID>;
+$auth_token = <Your Xoxzo AUTH TOKEN>;
+$recipient = '+818012345678';
+$tts_message = 'Hello';
+$tts_lang = 'en';
+$caller = '8108012345678';
+
+$xc = new XoxzoClient($sid, $auth_token);
+
+$resp = $xc->call_tts_playback($caller, $recipient, $tts_message, $tts_lang);
+
+if ($resp->errors != null){
+  print "Error status: $resp->errors\n";
+  return;
+}
+
+$callid = $resp->messages[0]->callid;
+$resp = $xc->get_simple_playback_status($callid);
+var_dump($resp);
+```
+
+#### Explanation
+
++ You can call `call_tts_playback()` method to playback TTS message. You need to provide four parameters.
+
+  - caller: this number will be displayed on the recipient device.
+  - tts_message: TTS text message you want to playback.
+  - tts_lang: language code of TTS call.
+  - recipient: phone number of the sms recipient. This must start with Japanese country code "+81" and follow the E.164 format.
+
++ This method will return `XoxzoResponse` object. If `XoxzoResponse.errors == null`, `XoxzoResponse->messages[0]->callid` is the call id that you can pass to the `get_simple_playback_status() call.
+
++ You can check the call status by `get_simple_playback_status()` method. You will provide call-id of the phone call you want to check.
 
 -----
-
 ### DIN (Dial in numbers)
 
 ### Subscribe DIN
