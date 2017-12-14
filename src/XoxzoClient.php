@@ -31,7 +31,8 @@ class XoxzoClient
         $this->client = new HttpClient();
         $api_host = "https://api.xoxzo.com";
         $this->xoxzo_api_sms_url = $api_host . "/sms/messages/";
-        $this->xoxzo_api_voice_simple_url = $api_host . "/voice/simple/playback/";
+        $this->xoxzo_api_call_url = $api_host . "/calls/";
+        $this->xoxzo_api_voice_simple_url = $api_host . "/voice/simple/playbacks/";
         $this->xoxzo_api_dins_url = $api_host . "/voice/dins/";
         $this->guzzle_options = ['http_errors' => false] + $basic_auth_data;
     }
@@ -130,7 +131,7 @@ class XoxzoClient
 
     public function get_simple_playback_status($callid)
     {
-        $url = $this->xoxzo_api_voice_simple_url . $callid;
+        $url = $this->xoxzo_api_call_url . $callid;
         try {
             $resp = $this->client->get($url, $this->guzzle_options);
             return $this->parse($resp);
