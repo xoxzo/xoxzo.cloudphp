@@ -2,6 +2,25 @@
 
 This is the PHP client library for Xoxzo Cloud API. You can send sms or make a phone call and playback mp3 files.
 
+## Install
+
+The recommended way is through Composer:
+
+```
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
+```
+
+Next, run the Composer command to install the latest stable version of cloudphp:
+```
+php composer.phar require xoxzo/cloudphp
+```
+
+After installing, you need to require Composer's autoloader:
+```
+require 'vendor/autoload.php';
+```
+
 ## Sample Code
 
 ### Send SMS
