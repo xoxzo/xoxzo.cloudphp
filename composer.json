@@ -3,11 +3,12 @@
   "description": "Xoxzo telephony library",
   "authors": [
       {
-          "name": "Akira Nonaka",
-          "email": "akira@xoxzo.com"
+          "name": "Hyejeong Park",
+          "email": "jeong@xoxzo.com"
       }
   ],
   "minimum-stability": "dev",
+  "prefer-stable" : true,
 
     "require-dev": {
       "phpunit/phpunit": "5.0.*"
