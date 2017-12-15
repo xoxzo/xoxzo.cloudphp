@@ -7,7 +7,6 @@
           "email": "jeong@xoxzo.com"
       }
   ],
-  "version": "1.0.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
 
@@ -15,6 +14,7 @@
       "phpunit/phpunit": "5.0.*"
     },
     "require": {
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "xoxzo/cloudphp": "^1.0"
     }
 }
